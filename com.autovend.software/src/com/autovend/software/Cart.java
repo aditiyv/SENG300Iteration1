@@ -2,6 +2,8 @@ package com.autovend.software;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.autovend.devices.BarcodeScanner;
 import com.autovend.devices.DisabledException;
@@ -10,24 +12,27 @@ import com.autovend.devices.SimulationException;
 import com.autovend.products.BarcodedProduct;
 import com.autovend.products.Product;
 import com.autovend.*;
+import com.autovend.external.*;
 
 public class Cart {
-	public Cart () {
-		es = new ElectronicScale(5000,50);
+	public Cart (ElectronicScale elec) {
+		es = elec;
 	}
+	public static final Map<Barcode, BarcodedProduct> BARCODED_PRODUCT_DATABASE = new HashMap<>();
 	//will store all the items in one transaction
 	ArrayList<Product> cartOfItems;
 	//Total price 
 	public BigDecimal total;
 	private ElectronicScale es;
 	//adds item by scan
-	public boolean AddByScan (BarcodedProduct bp, BarcodeScanner bs) {
-		BarcodedUnit unit = new BarcodedUnit(bp.getBarcode(),bp.getExpectedWeight());
+	public boolean AddByScan (SellableUnit bp, BarcodeScanner bs) {
 		try {
-		if(bs.scan(unit)){
-			es.add(unit);
-			cartOfItems.add(bp);
-			total = total.add(bp.getPrice());
+		if(bs.scan(bp)){
+			//Ideally we would wait here for a couple seconds to see if the user has placed the items
+			es.add(bp);
+			BarcodedProduct barProd =BARCODED_PRODUCT_DATABASE.get(bp);
+			cartOfItems.add(barProd);
+			total = total.add(barProd.getPrice());
 			return true;
 		}
 		}
