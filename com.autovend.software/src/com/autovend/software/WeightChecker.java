@@ -34,16 +34,13 @@ public class WeightChecker implements ElectronicScaleObserver {
 		overload = true;
 		
 	}
-	public void weightFixed(ElectronicScale scale) {
-		scale.enable();
-		overload = false;
-	}
 	public boolean isOverWeight() {
 		return overload;
 	}
 	@Override
 	public void reactToOutOfOverloadEvent(ElectronicScale scale) {
-		// TODO Auto-generated method stub
+		scale.enable();
+		overload = false;
 		
 	}
 

@@ -56,6 +56,7 @@ public class Cart {
 			es.add(bp);
 			//Ideally we would wait here for a couple seconds to see if the user has placed the items
 			while(wc.isOverWeight()) {
+				at.getHelpUnloading(es,bp);
 				//how do we check if the weight changes??? so we can call wc.wieghtFixed
 				//if(weight is under) {
 				//wc.weightFixed	
@@ -91,9 +92,11 @@ public class Cart {
 			
 		if(scanSensed) {
 			scanSensed = false;
-			addByScan(bp);		
-		}
-		if(doneAdding) {
+			if(addByScan(bp)) {
+				//tell user they are 
+			}else {
+				//tell it failed
+			}
 			break;
 		}
 		}
@@ -108,5 +111,6 @@ public class Cart {
 	public void simulateResolveNoItemOnScale() {
 		notResolved = false;
 	}
+	
 }
 
