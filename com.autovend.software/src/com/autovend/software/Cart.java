@@ -16,7 +16,7 @@ import com.autovend.*;
 import com.autovend.external.ProductDatabases;
 
 public class Cart {
-	public Cart (ElectronicScale elec, BarcodeScanner barScan) {
+	public Cart (ElectronicScale elec, BarcodeScanner barScan, AttendantTerminal attendant) {
 		total = BigDecimal.ZERO;
 		es = elec;
 		bs = barScan;
@@ -24,6 +24,8 @@ public class Cart {
 		wc  = new WeightChecker();
 		es.register(wc);
 		bs.register(bsos);
+		at = attendant;
+		at.register(this);
 	}
 	private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
 	//will store all the items in one transaction
@@ -34,16 +36,23 @@ public class Cart {
 	private BarcodeScanner bs;
 	private Scan bsos;
 	private WeightChecker wc;
+	private AttendantTerminal at;
 	private boolean scanSensed =false;
 	private boolean doneAdding = false;
+	private boolean noBagForItem = false;
+	private boolean notResolved = true;
 	//adds item by scan
 	//I think for this approach we might need a class that reacts to events so that 
 	private boolean addByScan (SellableUnit bp) {
 		try {
 		if(bs.scan(bp)){
-//			if(noBagForItem) {
-//			Somehow don't add item to es
-//			}
+			wait(10);
+			if(noBagForItem) {
+				at.getHelp(this);
+			while(notResolved) {
+				;
+			}
+			}
 			es.add(bp);
 			//Ideally we would wait here for a couple seconds to see if the user has placed the items
 			while(wc.isOverWeight()) {
@@ -62,6 +71,9 @@ public class Cart {
 		}
 		catch(SimulationException s) {
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -89,6 +101,12 @@ public class Cart {
 	}
 	public void simulateScan() {
 		scanSensed = true;
+	}
+	public void simulateNotPlacedOnScale() {
+		noBagForItem = true;
+	}
+	public void simulateResolveNoItemOnScale() {
+		notResolved = false;
 	}
 }
 
