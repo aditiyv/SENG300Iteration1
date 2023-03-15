@@ -26,7 +26,6 @@ public class Cart {
 		es.register(wc);
 		bs.register(bsos);
 	}
-	private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
 	//will store all the items in one transaction
 	ArrayList<Product> cartOfItems;
 	//Total price 
@@ -58,6 +57,7 @@ public class Cart {
 			return false;
 		}
 		catch(SimulationException s) {
+			System.out.println(s.getMessage());
 			return false;
 		} catch (OverloadException e) {
 			bs.disable();

@@ -10,6 +10,7 @@ public class WeightChecker implements ElectronicScaleObserver {
 		
 	}
 	private boolean overload =false;
+	
 	@Override
 	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
@@ -24,13 +25,11 @@ public class WeightChecker implements ElectronicScaleObserver {
 
 	@Override
 	public void reactToWeightChangedEvent(ElectronicScale scale, double weightInGrams) {
-		//Nothing I can think of except
-		scale.enable();
+	
 	}
 
 	@Override
 	public void reactToOverloadEvent(ElectronicScale scale) {
-		scale.disable();
 		overload = true;
 		
 	}
@@ -39,7 +38,6 @@ public class WeightChecker implements ElectronicScaleObserver {
 	}
 	@Override
 	public void reactToOutOfOverloadEvent(ElectronicScale scale) {
-		scale.enable();
 		overload = false;
 		
 	}
