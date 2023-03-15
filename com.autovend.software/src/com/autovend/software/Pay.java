@@ -18,8 +18,13 @@ public abstract class Pay {
 	BigDecimal paymentDue = cart.getPrice();
 	int paymentMade = bill.getValue();
 	
+	int comparison = paymentDue.compareTo(BigDecimal.valueOf(paymentMade));
 	public void printReceipt() {
-		if (paymentMade < Integer.valueOf(paymentMade)) {
+		if (comparison == 0) {
+			
+		} else if (comparison < 0) {
+			
+		} else if (comparison > 0) {
 			
 		}
 	}
