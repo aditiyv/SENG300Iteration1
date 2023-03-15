@@ -2,6 +2,7 @@ package com.autovend.software;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.autovend.Barcode;
@@ -15,7 +16,7 @@ import com.autovend.products.Product;
 
 public class Scan implements BarcodeScannerObserver {
 public boolean enabled;
-public ArrayList<Product> cartOfItems;
+public HashMap<Product,Integer> cartOfItems;
 public BigDecimal total;
 private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
 
@@ -38,7 +39,11 @@ private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT
 	public void reactToBarcodeScannedEvent(BarcodeScanner barcodeScanner, Barcode barcode) {
 		BarcodedProduct barProd = myData.get(barcode);
 		total.add(barProd.getPrice());
-		cartOfItems.add(barProd);
+		if(cartOfItems.containsKey(barProd)) {
+			Integer itemNum =cartOfItems.get(barProd);
+			cartOfItems.put(barProd,itemNum+1);
+		}
+		cartOfItems.put(barProd,1);
 	}
 	public BigDecimal returnTotal() {
 		return total;

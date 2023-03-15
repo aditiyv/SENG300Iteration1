@@ -2,6 +2,9 @@ package com.autovend.software;
 
 import java.util.ArrayList;
 
+import com.autovend.SellableUnit;
+import com.autovend.devices.ElectronicScale;
+
 public class AttendantTerminal {
 	
 	public AttendantTerminal() {
@@ -15,4 +18,7 @@ public class AttendantTerminal {
 		cart.simulateResolveNoItemOnScale();
 	}
 
+	public void getHelpUnloading(ElectronicScale es, SellableUnit sellableUnit) {
+		es.remove(sellableUnit);
+	}
 }
