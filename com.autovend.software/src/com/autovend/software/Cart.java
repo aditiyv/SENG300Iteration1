@@ -17,7 +17,7 @@ import com.autovend.*;
 import com.autovend.external.ProductDatabases;
 
 public class Cart {
-	public Cart (ElectronicScale elec, BarcodeScanner barScan, AttendantTerminal attendant) {
+	public Cart (ElectronicScale elec, BarcodeScanner barScan) {
 		total = BigDecimal.ZERO;
 		es = elec;
 		bs = barScan;
@@ -25,8 +25,6 @@ public class Cart {
 		wc  = new WeightChecker();
 		es.register(wc);
 		bs.register(bsos);
-		at = attendant;
-		at.register(this);
 	}
 	private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
 	//will store all the items in one transaction
@@ -37,20 +35,18 @@ public class Cart {
 	private BarcodeScanner bs;
 	private Scan bsos;
 	private WeightChecker wc;
-	private AttendantTerminal at;
-	private boolean scanSensed =false;
-	private boolean doneAdding = false;
-	private boolean noBagForItem = false;
-	private boolean notResolved = true;
+	private double currentWeight = 0;
 	//adds item by scan
 	//I think for this approach we might need a class that reacts to events so that 
-	public boolean addByScan (SellableUnit bp) {
+	public boolean addByScan (SellableUnit bp) throws WeightDiscrepancyException {
 		try {
-		double currentWeight = es.getCurrentWeight();
+		currentWeight = es.getCurrentWeight();
 		if(bs.scan(bp)){
 			es.add(bp);
 			double newWeight = es.getCurrentWeight();
-			if(newWeight)
+			if(currentWeight + bp.getWeight() !=newWeight) {
+				throw new WeightDiscrepancyException();
+			}
 			//Ideally we would wait here for a couple seconds to see if the user has placed the items
 			if(wc.isOverWeight()) {
 				bs.disable();
@@ -63,12 +59,14 @@ public class Cart {
 		}
 		catch(SimulationException s) {
 			return false;
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (OverloadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			bs.disable();
+		}
+		try {
+			es.getCurrentWeight();
+			bs.enable();
+		}catch (OverloadException e) {
+			bs.disable();
 		}
 		return false;
 	}
@@ -81,14 +79,8 @@ public class Cart {
 		return bsos.returnTotal();
 	}
 	
-	public void simulateScan() {
-		scanSensed = true;
-	}
-	public void simulateNotPlacedOnScale() {
-		noBagForItem = true;
-	}
-	public void simulateResolveNoItemOnScale() {
-		notResolved = false;
+	public double getCurrentWeight() {
+		return currentWeight;
 	}
 	
 }

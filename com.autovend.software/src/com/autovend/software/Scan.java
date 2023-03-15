@@ -43,12 +43,14 @@ private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT
 			Integer itemNum =cartOfItems.get(barProd);
 			cartOfItems.put(barProd,itemNum+1);
 		}
-		cartOfItems.put(barProd,1);
+		else {
+			cartOfItems.put(barProd,1);
+		}
 	}
 	public BigDecimal returnTotal() {
 		return total;
 	}
-	public ArrayList<Product> returnCart(){
+	public HashMap<Product,Integer> returnCart(){
 		return cartOfItems;
 	}
 
