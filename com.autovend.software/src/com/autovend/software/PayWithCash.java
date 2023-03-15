@@ -2,7 +2,7 @@ package com.autovend.software;
 
 import java.util.Scanner;
 
-public class PayByCredit extends Pay {
+public class PayWithCash extends Pay {
 
 	@Override
 	public void pay() {
