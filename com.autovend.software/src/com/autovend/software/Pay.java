@@ -16,7 +16,7 @@ public abstract class Pay {
 	public abstract void pay(); 
 	
 	BigDecimal paymentDue = cart.getPrice();
-	int paymentMade = bill.getValue();
+	int paymentMade = bill.getValue(); //Wrong at the moment, should be the amount the customers have paid
 	
 	int comparison = paymentDue.compareTo(BigDecimal.valueOf(paymentMade));
 	public void printReceipt() {
