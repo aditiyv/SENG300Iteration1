@@ -31,16 +31,17 @@ public class Cart {
 	//Total price 
 	public BigDecimal total;
 	private ElectronicScale es;
-	private BarcodeScanner bs;
+	private BarcodeScanner bs; 
 	private Scan bsos;
 	private WeightChecker wc;
 	private double currentWeight = 0;
 	//adds item by scan
 	//I think for this approach we might need a class that reacts to events so that 
-	public boolean addByScan (SellableUnit bp) throws WeightDiscrepancyException {
+	public boolean addByScan (SellableUnit bp) throws WeightDiscrepancyException, OverloadException {
 		try {
 		currentWeight = es.getCurrentWeight();
 		if(bs.scan(bp)){
+			bs.disable();
 			es.add(bp);
 			double newWeight = es.getCurrentWeight();
 			if(currentWeight + bp.getWeight() !=newWeight) {
@@ -48,8 +49,9 @@ public class Cart {
 			}
 			//Ideally we would wait here for a couple seconds to see if the user has placed the items
 			if(wc.isOverWeight()) {
-				bs.disable();
+				throw new OverloadException();
 			}
+			bs.enable();
 			return true;
 		}
 		}
