@@ -21,11 +21,12 @@ public abstract class Pay {
 	int comparison = paymentDue.compareTo(BigDecimal.valueOf(paymentMade));
 	public void printReceipt() {
 		if (comparison == 0) {
-			
+			paymentDue = BigDecimal.valueOf(0);
 		} else if (comparison < 0) {
-			
+			//Payment haven't been made, amount due remains the same
 		} else if (comparison > 0) {
-			
+			//Payment have been made
+			paymentDue = BigDecimal.valueOf(0);
 		}
 	}
 	
