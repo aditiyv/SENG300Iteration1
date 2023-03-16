@@ -1,5 +1,6 @@
 package com.autovend.software;
 
+
 import java.util.Map;
 
 import com.autovend.Bill;
@@ -46,4 +47,6 @@ public class Pay {
 		}
 		return 0.0;
 	}
+
+
 }
