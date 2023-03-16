@@ -61,14 +61,6 @@ public class Cart {
 		catch(SimulationException s) {
 			System.out.println(s.getMessage());
 			return false;
-		} catch (OverloadException e) {
-			bs.disable();
-		}
-		try {
-			es.getCurrentWeight();
-			bs.enable();
-		}catch (OverloadException e) {
-			bs.disable();
 		}
 		return false;
 	}
