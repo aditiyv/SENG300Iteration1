@@ -27,7 +27,7 @@ public class Pay {
 		bValidator = billval;
 		bc= new BillCalculator();
 		bValidator.register(bc);
-	}
+	} 
 	
 	//Will return the amount left to pay if not payed in full, if change is due then it will handle it here
 	public double payWithCash(double amount,Bill bill){
