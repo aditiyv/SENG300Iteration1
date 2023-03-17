@@ -84,6 +84,7 @@ public class Cart {
 	public double getCurrentWeight() {
 		return currentWeight;
 	}
+	//testing
 	
 }
 
