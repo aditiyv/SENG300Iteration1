@@ -30,6 +30,12 @@ public class Pay {
 	} 
 	
 	//Will return the amount left to pay if not payed in full, if change is due then it will handle it here
+	/**
+	 * 
+	 * @param amount the amount owed
+	 * @param bill the bill that has been inserted
+	 * @return
+	 */
 	public double payWithCash(double amount,Bill bill){
 		bValidator.accept(bill);
 		try {
