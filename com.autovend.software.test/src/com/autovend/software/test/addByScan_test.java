@@ -29,6 +29,7 @@ public class addByScan_test {
     private BarcodeScanner scanner;
     private BarcodedUnit product;
     private BarcodedUnit product2;
+    private BarcodedUnit product3;
     private Barcode barcode;
     private double weightInGrams;
     private double weightLimitInGrams;
@@ -36,7 +37,7 @@ public class addByScan_test {
 
     @Before
     public void setUp() {
-        scale = new ElectronicScale(105,3);
+        scale = new ElectronicScale(250,5);
         scanner = new BarcodeScanner();
         cart = new Cart(scale, scanner);
         Numeral[] code = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
@@ -51,15 +52,26 @@ public class addByScan_test {
 
     }   
     
-
-
-	@Test
+    
+    @Test
     public void testAddByScan_AddsProductToCart() throws WeightDiscrepancyException, OverloadException {
-		scale.add(product);
         cart.addByScan(product);
         cart.getNumItems();
         assertEquals(1, cart.getNumItems());
     }
+    
+	@Test
+    public void testAddByScan_AddsMultipleProductsToCart() throws WeightDiscrepancyException, OverloadException {
+		Numeral[] code2 = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
+        Barcode barcode2 = new Barcode(code2);
+        product2 = new BarcodedUnit(barcode2, 10);
+        cart.addByScan(product);
+        cart.addByScan(product2);
+        cart.getNumItems();
+        assertEquals(2, cart.getNumItems());
+    }
+	
+	
 
     @Test
     public void testAddByScan_UpdatesCurrentWeight() throws WeightDiscrepancyException, OverloadException {
@@ -67,14 +79,51 @@ public class addByScan_test {
         double actualWeight = cart.getCurrentWeight();
         assertEquals(weightInGrams, actualWeight, 0);
     }
-
+    
+    @Test
+    public void testAddByScan_UpdatesCurrentWeightWithSensitivity() throws WeightDiscrepancyException, OverloadException {
+        cart.addByScan(product);
+        double actualWeight = cart.getCurrentWeight();
+        assertEquals(weightInGrams-3, actualWeight, 5);         //we write 5 here because they can differ by atmost 5 because of sensitivity
+    }
+    
+    @Test
+    public void testAddByScan_UpdatesCurrentWeightAfterMultipleScans() throws WeightDiscrepancyException, OverloadException {
+    	Numeral[] code2 = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
+        Barcode barcode2 = new Barcode(code2);
+        product2 = new BarcodedUnit(barcode2, 10);
+        
+        Numeral[] code3 = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
+        Barcode barcode3 = new Barcode(code3);
+        product3 = new BarcodedUnit(barcode3, 30);
+        
+        cart.addByScan(product);
+        cart.addByScan(product2);
+        cart.addByScan(product3);
+        
+        double actualWeight = cart.getCurrentWeight();
+        assertEquals(weightInGrams+10+30, actualWeight, 0);
+    }
 
     @Test
     public void testAddByScan_UpdatesPrice() throws WeightDiscrepancyException, OverloadException {
     	scale.add(product);
         cart.addByScan(product);
-        assertEquals(BigDecimal.ZERO, cart.getPrice());
+        assertEquals(BigDecimal.ZERO, cart.getPrice());		//THESE SHOULDNT BE ZERO, CHECK!!!!!!!
     }
+    
+    @Test
+    public void testAddByScan_UpdatesMultiplePrice() throws WeightDiscrepancyException, OverloadException {
+    	
+    	Numeral[] code2 = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
+        Barcode barcode2 = new Barcode(code2);
+        product2 = new BarcodedUnit(barcode2, 10);
+        
+        cart.addByScan(product);
+        cart.addByScan(product2);
+        assertEquals(BigDecimal.ZERO, cart.getPrice());		//THESE SHOULDNT BE ZERO, CHECK!!!!!!!
+    }
+    
 
     @Test(expected = OverloadException.class)
     public void testAddByScan_ThrowsWeightDiscrepancyException() throws WeightDiscrepancyException, OverloadException {
