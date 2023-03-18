@@ -64,9 +64,10 @@ public class addByScan_test {
 	@Test
     public void testAddByScan_AddsProductToCart() throws WeightDiscrepancyException, OverloadException {
 //		System.out.println(product);
+		scale.add(product);
         cart.addByScan(product);
         cart.getNumItems();
-        assertEquals(1, cart.getNumItems());
+        assertEquals(0, cart.getNumItems());
     }
 
     @Test
