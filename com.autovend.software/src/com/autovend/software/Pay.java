@@ -3,11 +3,17 @@ package com.autovend.software;
 
 import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.Currency;
+
 import com.autovend.Bill;
 import com.autovend.devices.BillDispenser;
 import com.autovend.devices.BillSlot;
 import com.autovend.devices.BillStorage;
 import com.autovend.devices.BillValidator;
+import com.autovend.devices.DisabledException;
+import com.autovend.devices.EmptyException;
+import com.autovend.devices.OverloadException;
 import com.autovend.devices.SimulationException;
 
 public class Pay {
@@ -34,25 +40,86 @@ public class Pay {
 	 * 
 	 * @param amount the amount owed
 	 * @param bill the bill that has been inserted
-	 * @return
+	 * @return Updated amount value based on valid Bill value
+	 * Exceptions return the
 	 */
-	public double payWithCash(double amount,Bill bill){
-		bValidator.accept(bill);
+	public double payWithCash(double amount,Bill bill)throws DisabledException, OverloadException{
 		try {
+			bValidator.accept(bill);
 			if(!bsInput.hasSpace()){
 				bc.resetValue();
-				return 0.0;
+				return amount;
 			}else {
+				bStorage.accept(bill);
 				double amountInserted = bc.getValue();
 				amount = amount - amountInserted;
-				//AT THIS POINT I HAVE DETERMINED A BILL IS VALID AND INSERTED DO WHAT U WILL AND ASK ME QUESIONS IF YOU WOULD LIKE
+				
+				if(amount < 0) calculateChange(-amount);
 			}
 			
 		}catch(SimulationException s){
-			return 0.0;
+			return amount;
 		}
-		return 0.0;
+		if(amount > 0) return amount;
+		
+		else return 0.0;
 	}
-
+	
+	
+	/*
+	 * Calculates change for customer, currently will only return change in Bills
+	 * In future iterations, will include coin change calculation
+	 */
+	/**
+	 * Calculates change for customer, currently will only calculates change in Bills
+	 * In future iterations, will include coin change calculation
+	 * @param amountOfChange the amount of change to be returned
+	 * @param bill the bill that has been inserted
+	 */
+	public void calculateChange(double amountOfChange){
+		
+		//Finds the largest denomination of bill possible for change amount
+		int temp = (int)amountOfChange;
+		while(temp > 0) {
+			
+			if(bDispensers.containsKey((int)temp)) {
+			//Will give multiple of same denomination of bill if appropriate
+				while((amountOfChange - temp) > 0) {
+				returnChange(bDispensers.get(temp), new Bill(temp, Currency.getInstance("CAD")));
+				
+				amountOfChange -= temp; 
+				}
+			}
+			temp--;
+		}
+	}		
+			//Do I need to add bill storage observer (or whichever) to notify system when to update balance
+			//Do I need to make an observer that implements billslotobserver to notify system when bills are ejected?
+	
+	/**
+	 * returnChange will only occur if calculateChange occurs. Ejects 
+	 * appropriate bills as change to the customer
+	 * @param dispenser Appropriate BillDispenser to dispense correct bill
+	 * @param billChange Bill to be dispensed by BillDispenser
+	 * @throws 
+	 */
+	void returnChange(BillDispenser dispenser, Bill billChange){
+		try {
+			dispenser.emit();
+		} catch (DisabledException | EmptyException | OverloadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		if (bsOutput.hasSpace()){
+		try {
+			bsOutput.emit(billChange);
+		} catch (DisabledException | SimulationException | OverloadException e1) {
+			//Attendant would be alerted if Exceptions occur
+			e1.printStackTrace();
+			}
+		}
+	}
 
 }
