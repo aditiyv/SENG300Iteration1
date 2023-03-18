@@ -13,9 +13,6 @@ import com.autovend.products.Product;
 public class PrintReceipt {
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
-		
-		
-		
 		// Get items, get price, then print it
 		
 		// Print the bill record
@@ -25,12 +22,16 @@ public class PrintReceipt {
 		
 		
 		for (Product key : map.keySet()) {
-			Integer quantity = map.get(key);	
+			Integer quantity = map.get(key);
+			String quantityAmount = quantity.toString();
 			BigDecimal price = key.getPrice();
+			String moneyAmount = price.toString();
 			String s = key.toString();
 			// Print char from string (receiptP);
 			for (int i = 0; i < s.length(); i++) {
 				receiptPrinter.print(s.charAt(i));
+				receiptPrinter.print(quantityAmount.charAt(i));
+				receiptPrinter.print(moneyAmount.charAt(i));
 			}
 			// Make observer react ink;
 			
