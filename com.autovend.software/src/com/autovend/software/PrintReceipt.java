@@ -21,6 +21,7 @@ public class PrintReceipt {
 		HashMap<Product,Integer> map = cart.getCart();
 		
 		
+		// Print the receipt
 		for (Product key : map.keySet()) {
 			Integer quantity = map.get(key);
 			String quantityAmount = quantity.toString();
@@ -29,17 +30,25 @@ public class PrintReceipt {
 			String s = key.toString();
 			// Print char from string (receiptP);
 			for (int i = 0; i < s.length(); i++) {
+				try {
 				receiptPrinter.print(s.charAt(i));
 				receiptPrinter.print(quantityAmount.charAt(i));
 				receiptPrinter.print(moneyAmount.charAt(i));
+				} catch (Exception e) { 
+					if (e.getMessage().equals("Out of paper") || e.getMessage().equals("Out of ink")) {
+			            // If the printer is out of paper or ink, abort the printing and suspend the station
+			            receiptPrinter.disable();
+			            // Inform the attendant that a duplicate receipt must be printed and that the station needs maintenance
+			            receiptPrinter.notify();
+			            break; // exit the loop
+			        } else {
+			            throw e; // re-throw the exception if it is not related to printer status
+			        }
+				}
 			}
 			// Make observer react ink;
 			
 		}
-			
-		
-		// Print the receipt
-		
 		
 		// Signals to Customer I/O that the customer’s session is complete
 		
@@ -52,10 +61,7 @@ public class PrintReceipt {
 		
 		
 		// Ready for a new customer session
-		String ready = "Ready for the Customer";
-		for (int i = 0; i < ready.length(); i++) {
-			receiptPrinter.print(ready.charAt(i));
-		}
+		
 		
 	}
 }
