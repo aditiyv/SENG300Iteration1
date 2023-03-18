@@ -44,10 +44,17 @@ public class PrintReceipt {
 		
 		
 		// Thanks the Customer
+		String thanks = "Thanks the Customer";
+		for (int i = 0; i < thanks.length(); i++) {
+			receiptPrinter.print(thanks.charAt(i));
+		}
 		
 		
 		// Ready for a new customer session
-		
+		String ready = "Ready for the Customer";
+		for (int i = 0; i < ready.length(); i++) {
+			receiptPrinter.print(ready.charAt(i));
+		}
 		
 	}
 }
