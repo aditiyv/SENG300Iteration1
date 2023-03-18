@@ -14,12 +14,13 @@ import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.Product;
 
 public class PrintReceipt implements ReceiptPrinterObserver {
+	
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
 		// Get items, get price, then print it
 		
 		// Print the bill record
-		// Key of hashmap is product code
+		// Key of hashMap is product code
 		
 		HashMap<Product,Integer> map = cart.getCart();
 		
@@ -51,24 +52,20 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			        }
 				}
 			}
-			// Make observer react ink;
-			
 		}
-		
-		// Signals to Customer I/O that the customer’s session is complete
-		
-		
-		// Thanks the Customer
-		String thanks = "Thanks the Customer";
-		for (int i = 0; i < thanks.length(); i++) {
-			receiptPrinter.print(thanks.charAt(i));
-		}
-		
-		
-		// Ready for a new customer session
-		
-		
 	}
+	
+	// Make a method that return true
+	// Signals to Customer I/O that the customer’s session is complete
+	public boolean sessionComplete() {
+		return true;
+	}
+	
+	// Thanks the Customer
+	
+		
+	// Ready for a new customer session
+	
 
 	@Override
 	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
