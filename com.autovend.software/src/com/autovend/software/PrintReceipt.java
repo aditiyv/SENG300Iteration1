@@ -20,6 +20,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		// Get items, get price, then print it
 		
 		// Print the bill record
+<<<<<<< HEAD
 		// Key of hashmap is product code
 		receiptPrinter.register(this);
 		
