@@ -71,11 +71,12 @@ public class addByScan_test {
             // Pass
         }
     }
-//passed test:
+///passed test:
     @Test(expected = OverloadException.class)
     public void testAddByScan_ThrowsOverloadException() throws WeightDiscrepancyException, OverloadException {
         // Set scale weight to be greater than max weight
         scale.setCurrentWeight(weightInGrams);
         cart.addByScan(product);
     }
+    
 }
