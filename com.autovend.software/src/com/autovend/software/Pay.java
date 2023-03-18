@@ -84,7 +84,7 @@ public class Pay {
 				return amount; //Return unchanged cart balance.	
 			} catch (DisabledException | SimulationException | OverloadException e) {
 				throw new StorageFullException(); 
-				//Can be changed to a more specific exception. Will be used to notify attendant.
+				//Can be changed to a more specific exception. Will be used to notify attendant
 			} 
 		}
 	}
