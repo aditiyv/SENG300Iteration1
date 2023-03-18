@@ -1,5 +1,5 @@
 package com.autovend.software;
-
+//BRETT LYLE 30103268
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.observers.AbstractDeviceObserver;
