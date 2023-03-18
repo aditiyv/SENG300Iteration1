@@ -140,4 +140,10 @@ public class ElectronicScale extends AbstractDevice<ElectronicScaleObserver> {
 				observer.reactToWeightChangedEvent(this, currentWeightInGrams);
 		}
 	}
+
+	///STUB FOR addByScan_test
+	public void setCurrentWeight(double weight) {
+        this.currentWeightInGrams = weight;
+    }
+
 }
