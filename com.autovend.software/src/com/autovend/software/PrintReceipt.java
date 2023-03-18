@@ -5,12 +5,15 @@ import java.util.Currency;
 import java.util.HashMap;
 
 import com.autovend.Bill;
+import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.ReceiptPrinter;
+import com.autovend.devices.observers.AbstractDeviceObserver;
+import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.Product;
 
-public class PrintReceipt {
+public class PrintReceipt implements ReceiptPrinterObserver {
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
 		// Get items, get price, then print it
@@ -19,7 +22,6 @@ public class PrintReceipt {
 		// Key of hashmap is product code
 		
 		HashMap<Product,Integer> map = cart.getCart();
-		
 		
 		// Print the receipt
 		for (Product key : map.keySet()) {
@@ -35,12 +37,15 @@ public class PrintReceipt {
 				receiptPrinter.print(quantityAmount.charAt(i));
 				receiptPrinter.print(moneyAmount.charAt(i));
 				} catch (Exception e) { 
-					if (e.getMessage().equals("Out of paper") || e.getMessage().equals("Out of ink")) {
+					if (e.getMessage().equals("Out of paper")) {
 			            // If the printer is out of paper or ink, abort the printing and suspend the station
 			            receiptPrinter.disable();
 			            // Inform the attendant that a duplicate receipt must be printed and that the station needs maintenance
-			            receiptPrinter.notify();
+			            reactToOutOfPaperEvent(receiptPrinter);
 			            break; // exit the loop
+			        } else if (e.getMessage().equals("Out of ink")) {
+			        	receiptPrinter.disable();
+			            reactToOutOfInkEvent(receiptPrinter);
 			        } else {
 			            throw e; // re-throw the exception if it is not related to printer status
 			        }
@@ -62,6 +67,42 @@ public class PrintReceipt {
 		
 		// Ready for a new customer session
 		
+		
+	}
+
+	@Override
+	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToDisabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToPaperAddedEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reactToInkAddedEvent(ReceiptPrinter printer) {
+		// TODO Auto-generated method stub
 		
 	}
 }
