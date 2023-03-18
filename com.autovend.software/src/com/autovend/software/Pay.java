@@ -59,7 +59,7 @@ public class Pay {
 				double amountInserted = bc.getValue();
 				amount = amount - amountInserted;
 				
-				if(amount < 0) calculateChange(-amount, bill);
+				if(amount < 0) calculateChange(-amount);
 			}
 			
 		}catch(SimulationException s){
@@ -79,7 +79,7 @@ public class Pay {
 	 * @param amountOfChange the amount of change to be returned
 	 * @param bill the bill that has been inserted
 	 */
-	public void calculateChange(double amountOfChange, Bill bill){
+	public void calculateChange(double amountOfChange){
 		
 		//Finds the largest denomination of bill possible for change amount
 		int temp = (int)amountOfChange;
@@ -89,7 +89,8 @@ public class Pay {
 			//Will give multiple of same denomination of bill if appropriate
 				
 				while((amountOfChange - temp) > 0) {
-				returnChange(bDispensers.get(temp), bill);
+				returnChange(bDispensers.get(temp), new Bill(temp, Currency.getInstance("USD"))); 
+				//Unfortunately, BillDispenser can not return the Bill that it dispenses. "USD" will be the placeholder
 				
 				amountOfChange -= temp; 
 				}
