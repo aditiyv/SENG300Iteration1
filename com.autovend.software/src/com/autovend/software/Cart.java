@@ -99,6 +99,15 @@ public class Cart {
 	public double getCurrentWeight() {
 		return currentWeight;
 	}
+	
+	public int getNumItems() {
+	    HashMap<Product, Integer> cart = bsos.returnCart();
+	    int numItems = 0;
+	    for (Map.Entry<Product, Integer> entry : cart.entrySet()) {
+	        numItems += entry.getValue();
+	    }
+	    return numItems;
+	}
 
 }
 

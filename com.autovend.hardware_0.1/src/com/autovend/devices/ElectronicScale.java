@@ -141,9 +141,6 @@ public class ElectronicScale extends AbstractDevice<ElectronicScaleObserver> {
 		}
 	}
 
-	///STUB FOR addByScan_test
-	public void setCurrentWeight(double weight) {
-        this.currentWeightInGrams = weight;
-    }
+	
 
 }
