@@ -98,10 +98,7 @@ public class Cart {
 	}
 	
 	public double getCurrentWeight() {
-		for(Map.Entry<Product, Integer> entry : bsos.returnCart().entrySet()) {
-			entry.getKey().
-		}
-		if (currentWeight !=
+		
 		
 		return currentWeight;
 		}
