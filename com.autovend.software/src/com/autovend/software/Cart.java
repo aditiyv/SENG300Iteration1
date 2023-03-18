@@ -72,8 +72,10 @@ public class Cart {
 			if(wc.isOverWeight()) {
 				throw new OverloadException();
 			}
+			currentWeight = newWeight;
 			bs.enable();
 			return true;
+			
 		}
 		}
 		catch(DisabledException e) {
@@ -97,7 +99,7 @@ public class Cart {
 	
 	public double getCurrentWeight() {
 		return currentWeight;
-	}
+		}
 	
 	public int getNumItems() {
 	    HashMap<Product, Integer> cart = bsos.returnCart();

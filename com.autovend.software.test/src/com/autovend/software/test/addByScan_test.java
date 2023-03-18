@@ -44,22 +44,17 @@ public class addByScan_test {
         weightInGrams = 90;
         weightLimitInGrams = 100;
         product = new BarcodedUnit(barcode, weightInGrams);
-//        System.out.println(product);
         
         BigDecimal p = new BigDecimal(10);
         BarcodedProduct product2 = new BarcodedProduct(barcode, "Test desc", p, 30);
-//        System.out.println(product2);
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product2);
-//        System.out.println(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode));
 
-        
     }   
     
 
 
 	@Test
     public void testAddByScan_AddsProductToCart() throws WeightDiscrepancyException, OverloadException {
-//		System.out.println(product);
 		scale.add(product);
         cart.addByScan(product);
         cart.getNumItems();
@@ -70,7 +65,6 @@ public class addByScan_test {
     public void testAddByScan_UpdatesCurrentWeight() throws WeightDiscrepancyException, OverloadException {
         cart.addByScan(product);
         double actualWeight = cart.getCurrentWeight();
-       // System.out.println("Actual Weight: " + actualWeight);
         assertEquals(weightInGrams, actualWeight, 0);
     }
 
@@ -99,7 +93,6 @@ public class addByScan_test {
         Barcode barcode2 = new Barcode(code2);
         product2 = new BarcodedUnit(barcode2, weightInGrams+500);
         cart.addByScan(product2);
-        
         
     }
 
