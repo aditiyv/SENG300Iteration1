@@ -24,6 +24,9 @@ public class Pay {
 	BillValidator bValidator;
 	Map<Integer, BillDispenser> bDispensers;
 	BillCalculator bc;
+	StorageCapacityChecker scc;
+	
+	
 	public Pay(Cart cartl,BillValidator billval,BillSlot billInput,BillSlot billOutput, BillStorage billStorage, Map<Integer, BillDispenser> billDispensers) {
 		cart = cartl;
 		bsInput = billInput;
@@ -32,6 +35,8 @@ public class Pay {
 		bDispensers = billDispensers;
 		bValidator = billval;
 		bc= new BillCalculator();
+		scc = new StorageCapacityChecker();
+		billStorage.register(scc);
 		bValidator.register(bc);
 	} 
 	
@@ -42,10 +47,11 @@ public class Pay {
 	 * @param bill the bill that has been inserted
 	 * @return Updated amount value based on valid Bill value
 	 * Exceptions return the
+	 * @throws SimulationException 
 	 * @throws OverloadException Indicates billStorage is full
 	 * @throws DisabledException Indicates billStorage is disabled
 	 */
-	public double payWithCash(double amount,Bill bill) throws DisabledException, OverloadException{
+	public double payWithCash(double amount,Bill bill) throws DisabledException, OverloadException {
 		try {
 			
 			bValidator.accept(bill);
@@ -54,22 +60,30 @@ public class Pay {
 				bc.resetValue();
 				return amount;
 			}else {
-				
+		
 				bStorage.accept(bill);
+				if(scc.full) {
+					throw new StorageFullException();
+				}
 				double amountInserted = bc.getValue();
 				amount = amount - amountInserted;
 				
-				if(amount < 0) calculateChange(-amount);
+				if(amount < 0){
+				calculateChange(-amount);
+				return 0.0; //Cart balance paid in full
+				}
+				else return amount; //Returns updated amount due to Customer I/O
 			}
 			
+	
 		}catch(SimulationException s){
-			bsInput.emit(bill); //Bill is ejected, Attendant is notified.
-			return amount; //Return unchanged cart balance.
-			
+			try {
+				bsInput.emit(bill);
+			} catch (DisabledException | SimulationException | OverloadException e) {
+				return amount;
+			} //Bill is ejected, Attendant is notified.
+			return amount; //Return unchanged cart balance.	
 		}
-		if(amount > 0) return amount; //Returns updated amount due to Customer I/O
-		
-		else return 0.0; //Cart balance paid in full
 	}
 	
 	
@@ -87,8 +101,8 @@ public class Pay {
 			
 			if(bDispensers.containsKey((int)temp)) {
 			//Will give multiple of same denomination of bill if appropriate
-				
-				while((amountOfChange - temp) > 0) {
+
+				while((amountOfChange - temp) > temp) {
 				returnChange(bDispensers.get(temp), new Bill(temp, Currency.getInstance("USD"))); 
 				//Unfortunately, BillDispenser can not return the Bill that it dispenses. "USD" will be the placeholder
 				
@@ -109,23 +123,16 @@ public class Pay {
 	 * @throws DisabledException; EmptyException; OverloadException
 	 */
 	boolean returnChange(BillDispenser dispenser, Bill billChange){
-		try {
-			dispenser.emit();
-			
-		} catch (DisabledException | EmptyException | OverloadException e) {
-			return false; //Request attendant assistance 
 
-		}
 		
 		if (bsOutput.hasSpace()){
-		try {
-			bsOutput.emit(billChange);
-			
-		} catch (DisabledException | SimulationException | OverloadException e1) {
-			return false; //Request attendant assistance 
+			try {
+				dispenser.emit();
+				
+			} catch (DisabledException | EmptyException | OverloadException e) {
+				return false; //Request attendant assistance
 			}
 		}
-		
 		else {
 			return false;
 		}
