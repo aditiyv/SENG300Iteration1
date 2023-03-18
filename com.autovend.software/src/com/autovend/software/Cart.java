@@ -81,7 +81,6 @@ public class Cart {
 			return false;
 		}
 		catch(SimulationException s) {
-			System.out.println(s.getMessage());
 			bs.enable();
 			return false;
 		}

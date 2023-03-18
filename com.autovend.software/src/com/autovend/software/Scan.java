@@ -16,7 +16,7 @@ import com.autovend.products.Product;
 
 public class Scan implements BarcodeScannerObserver {
 public boolean enabled;
-public HashMap<Product,Integer> cartOfItems;
+public HashMap<Product,Integer> cartOfItems = new HashMap<Product, Integer>();
 public BigDecimal total;
 private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
 	//This class will record the total of money owed and the Products along with the number of times it has been added

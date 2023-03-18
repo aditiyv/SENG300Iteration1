@@ -28,6 +28,7 @@ public class addByScan_test {
     private ElectronicScale scale;
     private BarcodeScanner scanner;
     private BarcodedUnit product;
+    private BarcodedUnit product2;
     private Barcode barcode;
     private double weightInGrams;
     private double weightLimitInGrams;
@@ -35,13 +36,13 @@ public class addByScan_test {
 
     @Before
     public void setUp() {
-        scale = new ElectronicScale(5,5);
+        scale = new ElectronicScale(105,3);
         scanner = new BarcodeScanner();
         cart = new Cart(scale, scanner);
         Numeral[] code = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
         Barcode barcode = new Barcode(code);
-        weightInGrams = 100.0;
-        weightLimitInGrams = 90;
+        weightInGrams = 90;
+        weightLimitInGrams = 100;
         product = new BarcodedUnit(barcode, weightInGrams);
 //        System.out.println(product);
         
@@ -55,11 +56,6 @@ public class addByScan_test {
     }   
     
 
-    private BarcodedProduct BarcodedProduct(Barcode barcode2, String string, BigDecimal p, int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Test
     public void testAddByScan_AddsProductToCart() throws WeightDiscrepancyException, OverloadException {
@@ -67,7 +63,7 @@ public class addByScan_test {
 		scale.add(product);
         cart.addByScan(product);
         cart.getNumItems();
-        assertEquals(0, cart.getNumItems());
+        assertEquals(1, cart.getNumItems());
     }
 
     @Test
@@ -81,6 +77,7 @@ public class addByScan_test {
 
     @Test
     public void testAddByScan_UpdatesPrice() throws WeightDiscrepancyException, OverloadException {
+    	scale.add(product);
         cart.addByScan(product);
         assertEquals(BigDecimal.ZERO, cart.getPrice());
     }
@@ -98,8 +95,11 @@ public class addByScan_test {
     @Test(expected = OverloadException.class)
     public void testAddByScan_ThrowsOverloadException() throws WeightDiscrepancyException, OverloadException {
         // Set scale weight to be less than max weight
-        scale.add(product);
-        cart.addByScan(product);
+        Numeral[] code2 = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
+        Barcode barcode2 = new Barcode(code2);
+        product2 = new BarcodedUnit(barcode2, weightInGrams+500);
+        cart.addByScan(product2);
+        
         
     }
 
