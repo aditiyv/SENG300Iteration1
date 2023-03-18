@@ -1,10 +1,8 @@
 package com.autovend.software;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.HashMap;
 
-import com.autovend.Bill;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
@@ -62,6 +60,9 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 	}
 	
 	// Thanks the Customer
+	public String thanksCustomer(ReceiptPrinter receiptPrinter) {
+		return "Thanks the Customer";
+	}
 	
 		
 	// Ready for a new customer session
