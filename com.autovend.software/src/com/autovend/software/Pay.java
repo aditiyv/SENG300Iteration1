@@ -45,20 +45,24 @@ public class Pay {
 	 */
 	public double payWithCash(double amount,Bill bill)throws DisabledException, OverloadException{
 		try {
+			
 			bValidator.accept(bill);
 			if(!bsInput.hasSpace()){
+				
 				bc.resetValue();
 				return amount;
 			}else {
+				
 				bStorage.accept(bill);
 				double amountInserted = bc.getValue();
 				amount = amount - amountInserted;
 				
-				if(amount < 0) calculateChange(-amount);
+				if(amount < 0) calculateChange(-amount, bill);
 			}
 			
 		}catch(SimulationException s){
 			return amount;
+			
 		}
 		if(amount > 0) return amount;
 		
@@ -66,17 +70,13 @@ public class Pay {
 	}
 	
 	
-	/*
-	 * Calculates change for customer, currently will only return change in Bills
-	 * In future iterations, will include coin change calculation
-	 */
 	/**
 	 * Calculates change for customer, currently will only calculates change in Bills
 	 * In future iterations, will include coin change calculation
 	 * @param amountOfChange the amount of change to be returned
 	 * @param bill the bill that has been inserted
 	 */
-	public void calculateChange(double amountOfChange){
+	public void calculateChange(double amountOfChange, Bill bill){
 		
 		//Finds the largest denomination of bill possible for change amount
 		int temp = (int)amountOfChange;
@@ -84,8 +84,9 @@ public class Pay {
 			
 			if(bDispensers.containsKey((int)temp)) {
 			//Will give multiple of same denomination of bill if appropriate
+				
 				while((amountOfChange - temp) > 0) {
-				returnChange(bDispensers.get(temp), new Bill(temp, Currency.getInstance("CAD")));
+				returnChange(bDispensers.get(temp), bill);
 				
 				amountOfChange -= temp; 
 				}
@@ -93,33 +94,38 @@ public class Pay {
 			temp--;
 		}
 	}		
-			//Do I need to add bill storage observer (or whichever) to notify system when to update balance
-			//Do I need to make an observer that implements billslotobserver to notify system when bills are ejected?
 	
 	/**
 	 * returnChange will only occur if calculateChange occurs. Ejects 
 	 * appropriate bills as change to the customer
 	 * @param dispenser Appropriate BillDispenser to dispense correct bill
 	 * @param billChange Bill to be dispensed by BillDispenser
-	 * @throws 
+	 * @return true if bill ejection was successful; false if exception was thrown.
+	 * 		   false return value will signal attendant to assist customer.
+	 * @throws DisabledException; EmptyException; OverloadException
 	 */
-	void returnChange(BillDispenser dispenser, Bill billChange){
+	boolean returnChange(BillDispenser dispenser, Bill billChange){
 		try {
 			dispenser.emit();
+			
 		} catch (DisabledException | EmptyException | OverloadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return false; //Request attendant assistance 
+
 		}
-		
 		
 		if (bsOutput.hasSpace()){
 		try {
 			bsOutput.emit(billChange);
+			
 		} catch (DisabledException | SimulationException | OverloadException e1) {
-			//Attendant would be alerted if Exceptions occur
-			e1.printStackTrace();
+			return false; //Request attendant assistance 
 			}
 		}
+		
+		else {
+			return false;
+		}
+		
+		return true;
 	}
-
 }
