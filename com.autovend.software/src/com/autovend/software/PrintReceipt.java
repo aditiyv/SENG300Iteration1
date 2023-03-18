@@ -14,6 +14,9 @@ import com.autovend.products.Product;
 public class PrintReceipt implements ReceiptPrinterObserver {
 
 	boolean outOfInk = false;
+	boolean sessionComplete = false;
+	boolean outOfPaper = false;
+	
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
 		// Get items, get price, then print it
@@ -40,6 +43,9 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				if(outOfInk) {
 					throw new EmptyException();
 				}
+				if(outOfPaper) {
+					throw new EmptyException();
+				}
 				try {
 				receiptPrinter.print(result.charAt(i));
 				} catch (OverloadException e) { 
@@ -47,12 +53,14 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				}
 			}
 		}
+		sessionComplete();
+		
 	}
 	
 	// Make a method that return true
 	// Signals to Customer I/O that the customer’s session is complete
 	public boolean sessionComplete() {
-		return true;
+		return sessionComplete = true;
 	}
 	
 	// Thanks the Customer
@@ -78,7 +86,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToOutOfPaperEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
+		outOfPaper = true;
 		
 	}
 
@@ -90,7 +98,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToPaperAddedEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
+		outOfPaper = false;
 		
 	}
 
