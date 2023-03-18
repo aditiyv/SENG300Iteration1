@@ -1,10 +1,8 @@
 package com.autovend.software;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.HashMap;
 
-import com.autovend.Bill;
 import com.autovend.devices.AbstractDevice;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
@@ -14,16 +12,18 @@ import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.Product;
 
 public class PrintReceipt implements ReceiptPrinterObserver {
+
 	boolean outOfInk = false;
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
 		// Get items, get price, then print it
 		
 		// Print the bill record
-<<<<<<< HEAD
 		// Key of hashmap is product code
 		receiptPrinter.register(this);
 		
+		// Key of hashMap is product code
+
 		
 		HashMap<Product,Integer> map = cart.getCart();
 		
@@ -46,24 +46,23 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 					result = "\n"+result.substring(i);
 				}
 			}
-			// Make observer react ink;
-			
 		}
-		
-		// Signals to Customer I/O that the customer’s session is complete
-		
-		
-		// Thanks the Customer
-		String thanks = "Thanks the Customer";
-		for (int i = 0; i < thanks.length(); i++) {
-			receiptPrinter.print(thanks.charAt(i));
-		}
-		
-		
-		// Ready for a new customer session
-		
-		
 	}
+	
+	// Make a method that return true
+	// Signals to Customer I/O that the customer’s session is complete
+	public boolean sessionComplete() {
+		return true;
+	}
+	
+	// Thanks the Customer
+	public String thanksCustomer(ReceiptPrinter receiptPrinter) {
+		return "Thanks the Customer";
+	}
+	
+		
+	// Ready for a new customer session
+	
 
 	@Override
 	public void reactToEnabledEvent(AbstractDevice<? extends AbstractDeviceObserver> device) {
