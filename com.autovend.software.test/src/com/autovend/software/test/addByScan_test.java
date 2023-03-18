@@ -44,7 +44,7 @@ public class addByScan_test {
         Numeral[] code = {Numeral.one, Numeral.two, Numeral.three, Numeral.four};
         Barcode barcode = new Barcode(code);
         weightInGrams = 90;
-        weightLimitInGrams = 100;
+        weightLimitInGrams = 100; 
         product = new BarcodedUnit(barcode, weightInGrams);
         
         BigDecimal p = new BigDecimal(10);
