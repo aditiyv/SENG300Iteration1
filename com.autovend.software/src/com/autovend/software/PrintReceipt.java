@@ -14,12 +14,15 @@ import com.autovend.devices.observers.ReceiptPrinterObserver;
 import com.autovend.products.Product;
 
 public class PrintReceipt implements ReceiptPrinterObserver {
+	boolean outOfInk = false;
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
 		// To-do
 		// Get items, get price, then print it
 		
 		// Print the bill record
 		// Key of hashmap is product code
+		receiptPrinter.register(this);
+		
 		
 		HashMap<Product,Integer> map = cart.getCart();
 		
@@ -30,25 +33,16 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 			BigDecimal price = key.getPrice();
 			String moneyAmount = price.toString();
 			String s = key.toString();
+			String result = s+"\t" + quantityAmount + "\t" + moneyAmount +"\n";
 			// Print char from string (receiptP);
-			for (int i = 0; i < s.length(); i++) {
+			for (int i = 0; i < result.length(); i++) {
+				if(outOfInk) {
+					throw new EmptyException();
+				}
 				try {
-				receiptPrinter.print(s.charAt(i));
-				receiptPrinter.print(quantityAmount.charAt(i));
-				receiptPrinter.print(moneyAmount.charAt(i));
-				} catch (Exception e) { 
-					if (e.getMessage().equals("Out of paper")) {
-			            // If the printer is out of paper or ink, abort the printing and suspend the station
-			            receiptPrinter.disable();
-			            // Inform the attendant that a duplicate receipt must be printed and that the station needs maintenance
-			            reactToOutOfPaperEvent(receiptPrinter);
-			            break; // exit the loop
-			        } else if (e.getMessage().equals("Out of ink")) {
-			        	receiptPrinter.disable();
-			            reactToOutOfInkEvent(receiptPrinter);
-			        } else {
-			            throw e; // re-throw the exception if it is not related to printer status
-			        }
+				receiptPrinter.print(result.charAt(i));
+				} catch (OverloadException e) { 
+					result = "\n"+result.substring(i);
 				}
 			}
 			// Make observer react ink;
@@ -90,7 +84,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToOutOfInkEvent(ReceiptPrinter printer) {
-		// TODO Auto-generated method stub
+		outOfInk = true;
 		
 	}
 
@@ -102,6 +96,7 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 
 	@Override
 	public void reactToInkAddedEvent(ReceiptPrinter printer) {
+		outOfInk = false;
 		// TODO Auto-generated method stub
 		
 	}
