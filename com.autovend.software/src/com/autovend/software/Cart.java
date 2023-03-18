@@ -47,6 +47,7 @@ public class Cart {
 	private Scan bsos;
 	private WeightChecker wc;
 	private double currentWeight = 0;
+	private double expectedWeight =0;
 	//adds item by scan
 	/**
 	 * 
@@ -65,13 +66,12 @@ public class Cart {
 			bs.disable();
 			es.add(bp);
 			double newWeight = es.getCurrentWeight();
+			System.out.println(newWeight);
 			if(currentWeight + bp.getWeight() !=newWeight) {
 				throw new WeightDiscrepancyException();
 			}
-			//Ideally we would wait here for a couple seconds to see if the user has placed the items
-			if(wc.isOverWeight()) {
-				throw new OverloadException();
-			}
+			//Ideally we would wait here for a couple seconds to see if the user has placed the item
+			System.out.println(newWeight);
 			currentWeight = newWeight;
 			bs.enable();
 			return true;
@@ -98,6 +98,11 @@ public class Cart {
 	}
 	
 	public double getCurrentWeight() {
+		for(Map.Entry<Product, Integer> entry : bsos.returnCart().entrySet()) {
+			entry.getKey().
+		}
+		if (currentWeight !=
+		
 		return currentWeight;
 		}
 	
