@@ -104,7 +104,7 @@ public class Cart {
 		}
 	
 	public int getNumItems() {
-	    HashMap<Product, Integer> cart = bsos.returnCart();
+	    HashMap<Product, Integer> cart = this.getCart();
 	    int numItems = 0;
 	    for (Map.Entry<Product, Integer> entry : cart.entrySet()) {
 	        numItems += entry.getValue();
