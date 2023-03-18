@@ -21,6 +21,12 @@ import com.autovend.*;
 import com.autovend.external.ProductDatabases;
 
 public class Cart {
+	/**
+	 * 
+	 * @param elec is the electronic scale that will be used to weigh items
+	 * @param barScan is the brocade scanner that will be used to scan items
+	 * Will also register listeners to each to a copy of bar code scanner and electronic scanner
+	 */
 	public Cart (ElectronicScale elec, BarcodeScanner barScan) {
 		total = BigDecimal.ZERO;
 		es = elec;
@@ -34,13 +40,24 @@ public class Cart {
 	ArrayList<Product> cartOfItems;
 	//Total price 
 	public BigDecimal total;
+	//copy of barcode scanner and electronic scale
 	private ElectronicScale es;
 	private BarcodeScanner bs; 
+	//listeners for each
 	private Scan bsos;
 	private WeightChecker wc;
 	private double currentWeight = 0;
 	//adds item by scan
-	//I think for this approach we might need a class that reacts to events so that 
+	/**
+	 * 
+	 * @param bp the sellable unit to be scanned
+	 * If the bar code scans an item then it will disable the bar code scanner and then add it to the scale and finally re enables the scanner
+	 * If the weight is not expected then throw an exception to get help from the attendant
+	 * if the the listener detects an overweight scale throw an exception to call for help
+	 * @return if a item was added to a cart
+	 * @throws WeightDiscrepancyException to signal for help
+	 * @throws OverloadException to signal for help
+	 */
 	public boolean addByScan (SellableUnit bp) throws WeightDiscrepancyException, OverloadException {
 		try {
 		currentWeight = es.getCurrentWeight();
@@ -60,10 +77,12 @@ public class Cart {
 		}
 		}
 		catch(DisabledException e) {
+			bs.enable();
 			return false;
 		}
 		catch(SimulationException s) {
 			System.out.println(s.getMessage());
+			bs.enable();
 			return false;
 		}
 		return false;
@@ -80,6 +99,6 @@ public class Cart {
 	public double getCurrentWeight() {
 		return currentWeight;
 	}
-	
+
 }
 

@@ -6,6 +6,7 @@ import com.autovend.devices.observers.AbstractDeviceObserver;
 import com.autovend.devices.observers.ElectronicScaleObserver;
 
 public class WeightChecker implements ElectronicScaleObserver {
+	//This class will report if the scale is overweight using observer for scale
 	public WeightChecker() {
 		
 	}

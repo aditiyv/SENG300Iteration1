@@ -19,7 +19,7 @@ public boolean enabled;
 public HashMap<Product,Integer> cartOfItems;
 public BigDecimal total;
 private Map<Barcode, BarcodedProduct> myData = ProductDatabases.BARCODED_PRODUCT_DATABASE;
-
+	//This class will record the total of money owed and the Products along with the number of times it has been added
 	public Scan() {
 		total = BigDecimal.ZERO;
 	}
