@@ -48,7 +48,8 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 				}
 				try {
 				receiptPrinter.print(result.charAt(i));
-				} catch (OverloadException e) { 
+				} catch (OverloadException e) {
+					i =0;
 					result = "\n"+result.substring(i);
 				}
 			}
