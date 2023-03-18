@@ -1,5 +1,5 @@
 package com.autovend.software;
-//BRETT LYLE 30103268
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 
@@ -14,7 +14,7 @@ import com.autovend.products.Product;
 public class PrintReceipt implements ReceiptPrinterObserver {
 
 	boolean outOfInk = false;
-	boolean sessionComplete = false;
+	public boolean sessionComplete = false;
 	boolean outOfPaper = false;
 	
 	public PrintReceipt(ReceiptPrinter receiptPrinter, Cart cart) throws OverloadException, EmptyException {
