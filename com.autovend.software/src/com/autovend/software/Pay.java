@@ -42,12 +42,14 @@ public class Pay {
 	 * @param bill the bill that has been inserted
 	 * @return Updated amount value based on valid Bill value
 	 * Exceptions return the
+	 * @throws OverloadException Indicates billStorage is full
+	 * @throws DisabledException Indicates billStorage is disabled
 	 */
-	public double payWithCash(double amount,Bill bill)throws DisabledException, OverloadException{
+	public double payWithCash(double amount,Bill bill) throws DisabledException, OverloadException{
 		try {
 			
 			bValidator.accept(bill);
-			if(!bsInput.hasSpace()){
+			if(!bsInput.hasSpace() || !bStorage.hasSpace()){
 				
 				bc.resetValue();
 				return amount;
@@ -61,12 +63,13 @@ public class Pay {
 			}
 			
 		}catch(SimulationException s){
-			return amount;
+			bsInput.emit(bill); //Bill is ejected, Attendant is notified.
+			return amount; //Return unchanged cart balance.
 			
 		}
-		if(amount > 0) return amount;
+		if(amount > 0) return amount; //Returns updated amount due to Customer I/O
 		
-		else return 0.0;
+		else return 0.0; //Cart balance paid in full
 	}
 	
 	
