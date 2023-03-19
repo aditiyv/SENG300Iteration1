@@ -63,14 +63,17 @@ public class payByCash_test {
 		
 		@Before
 		public void setUp() {
-			Cart cart = new Cart(escale, bcscan);
-			BillValidator billValidator = new BillValidator(currency, null);
+//			Cart cart1 = new Cart(escale, bcscan);
+			escale = new ElectronicScale(250,5);
+		    bcscan = new BarcodeScanner();
+		    cart1 = new Cart(escale, bcscan);
+			billValidator = new BillValidator(currency, null);
 			bls = new BillStorage(5);
-			BillDispenser bDisp = new BillDispenser(5);
-			BillSlot billInput = new BillSlot(false);
-			BillSlot billOutput = new BillSlot(false);
-			Map<Integer,BillDispenser> billDispensers = new HashMap<>();
-			myPay = new Pay(cart, billValidator, billInput, billOutput, bls, bDispensers);
+			bDisp = new BillDispenser(5);
+			billInput = new BillSlot(false);
+			billOutput = new BillSlot(false);
+			bDispensers = new HashMap<>();
+			myPay = new Pay(cart1, billValidator, billInput, billOutput, bls, bDispensers);
 			
 		}
 
@@ -128,4 +131,4 @@ public class payByCash_test {
 			assertEquals(2,bDisp.size());
 			
 		}	
-
+}
