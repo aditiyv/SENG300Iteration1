@@ -60,6 +60,35 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		
 	}
 	
+	public void print(ReceiptPrinter receiptPrinter, Cart cart) throws EmptyException {
+		HashMap<Product,Integer> map = cart.getCart();
+		
+		// Print the receipt
+		for (Product key : map.keySet()) {
+			Integer quantity = map.get(key);
+			String quantityAmount = quantity.toString();
+			BigDecimal price = key.getPrice();
+			String moneyAmount = price.toString();
+			String s = key.toString();
+			String result = s+"\t" + quantityAmount + "\t" + moneyAmount +"\n";
+			// Print char from string (receiptP);
+			for (int i = 0; i < result.length(); i++) {
+				if(outOfInk) {
+					throw new EmptyException();
+				}
+				if(outOfPaper) {
+					throw new EmptyException();
+				}
+				try {
+				receiptPrinter.print(result.charAt(i));
+				} catch (OverloadException e) {
+					i =0;
+					result = "\n"+result.substring(i);
+				}
+			}
+		}
+	}
+	
 	// Make a method that return true
 	// Signals to Customer I/O that the customer’s session is complete
 	public boolean sessionComplete() {
