@@ -1,5 +1,5 @@
 package com.autovend.software.test;
-
+//Alina Mansuri
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 
