@@ -14,12 +14,17 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.autovend.Barcode;
+import com.autovend.BarcodedUnit;
+import com.autovend.Numeral;
 import com.autovend.devices.BarcodeScanner;
 import com.autovend.devices.ElectronicScale;
 import com.autovend.devices.EmptyException;
 import com.autovend.devices.OverloadException;
 import com.autovend.devices.ReceiptPrinter;
 import com.autovend.products.Product;
+import com.autovend.external.*;
+
 import com.autovend.software.Cart;
 import com.autovend.software.PrintReceipt;
 
@@ -30,14 +35,33 @@ public class PrintReceiptTest {
 	PrintReceipt printReceipt;
 	//= new PrintReceipt(receiptPrinter, cart);
     HashMap<Product, Integer> testMap = new HashMap<Product, Integer>();
+    private ElectronicScale scale;
+    private BarcodedUnit product;
     
     @Before
     public void setUp() throws Exception {
         printReceipt = new PrintReceipt(printer, cart);
-
+        
         testMap = new HashMap<>();
         testMap = cart.getCart();
     }
+    
+    @Test
+    public void ReceiptPrinter() throws EmptyException, OverloadException{
+    	scale = new ElectronicScale(250,5);
+    	Numeral[] code = {Numeral.one, Numeral.five, Numeral.three, Numeral.four};
+    	Barcode barcode = new Barcode(code);
+    	product = new BarcodedUnit(barcode, 50);
+    	//ProductDatabases.BARCODED_PRODUCT_DATABASE.;
+    	scale.add(product);
+    	System.out.println(cart.getNumItems());
+    	printReceipt.print_rec(receiptPrinter, cart);
+    	
+    	
+    	
+    	
+    }
+    
     
     @Test(expected = EmptyException.class)
     public void testOutOfInk() throws EmptyException, OverloadException {
@@ -45,6 +69,13 @@ public class PrintReceiptTest {
         for (int i = 0; i < ReceiptPrinter.MAXIMUM_INK; i++) {
         	receiptPrinter.print('a');
         }
+    }
+    
+    @Test
+    public void testAddedInk() throws EmptyException, OverloadException {
+    	printReceipt.reactToInkAddedEvent(printer);
+        receiptPrinter.addInk(3);;
+        
     }
 
     @Test(expected = EmptyException.class)
@@ -54,10 +85,18 @@ public class PrintReceiptTest {
         	receiptPrinter.print('a');
         }
     }
+    
+    
+    @Test
+    public void testAddedPaper() throws EmptyException, OverloadException {
+    	printReceipt.reactToPaperAddedEvent(printer);
+        receiptPrinter.addPaper(5);
+        
+    }
 
     @Test
     public void testThanksCustomer() {
-    	String n = printReceipt.thanksCustomer(receiptPrinter);
+    	printReceipt.thanksCustomer(receiptPrinter);
         assertEquals("Thanks the Customer", printReceipt.thanksCustomer(receiptPrinter));
 }
     
