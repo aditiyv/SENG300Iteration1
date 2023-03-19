@@ -1,15 +1,9 @@
 //BRETT LYLE 30103268
 //Nam Nguyen Vu 30154892
 //Aditi Yadav 30143652
-//Alina Mansuri
+//Alina Mansuri 30008370
 //Arun Sharma 30124252
-
-
-
-//BRETT LYLE 30103268
-//Nam Nguyen Vu 30154892
-//Aditi Yadav 30143652
-//Alina Mansuri
+//Adam Mogensen 30071819
 
 
 package com.autovend.software.test;
@@ -45,10 +39,7 @@ import org.junit.Test;
 import com.autovend.devices.BillSlot;
 
 
-
-	
-
-public class payByCash_test {
+public class payByCash_test implements SelfCheckOutStation{
 	private Pay myPay;
 	Cart cart1;
 	BillSlot billInput;
@@ -59,13 +50,14 @@ public class payByCash_test {
 	BillValidator billValidator;
 	SelfCheckoutStation scs;
 	BillDispenser bDisp;
-	Map<Integer, BillDispenser> bDispensers;
+	Map<Integer, BillDispenser> billDispensers;
 	StorageCapacityChecker scc;
 	ElectronicScale escale;
 	BarcodeScanner bcscan;
 
 	Currency currency;
 	
+	int denominations[] = {1,2,5,10,20};
 		
 		
 		@Before
@@ -73,13 +65,13 @@ public class payByCash_test {
 			ElectronicScale escale = new ElectronicScale(10,5);
 			BarcodeScanner bcscan = new BarcodeScanner();
 			Cart cart = new Cart(escale, bcscan);
-			BillValidator billValidator = new BillValidator(currency, null);
+			BillValidator billValidator = new BillValidator(Currency.getInstance("CAD"),denominations );
 			bls = new BillStorage(5);
 			BillDispenser bDisp = new BillDispenser(5);
 			BillSlot billInput = new BillSlot(false);
 			BillSlot billOutput = new BillSlot(false);
 			Map<Integer,BillDispenser> billDispensers = new HashMap<>();
-			myPay = new Pay(cart, billValidator, billInput, billOutput, bls, bDispensers);
+			myPay = new Pay(cart, billValidator, billInput, billOutput, bls, billDispensers);
 			
 		}
 
