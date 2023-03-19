@@ -5,6 +5,13 @@
 //Arun Sharma 30124252
 
 
+
+//BRETT LYLE 30103268
+//Nam Nguyen Vu 30154892
+//Aditi Yadav 30143652
+//Alina Mansuri
+
+
 package com.autovend.software.test;
 
 import org.junit.Assert;
@@ -63,6 +70,8 @@ public class payByCash_test {
 		
 		@Before
 		public void setUp() {
+			ElectronicScale escale = new ElectronicScale(10,5);
+			BarcodeScanner bcscan = new BarcodeScanner();
 			Cart cart = new Cart(escale, bcscan);
 			BillValidator billValidator = new BillValidator(currency, null);
 			bls = new BillStorage(5);
@@ -123,9 +132,9 @@ public class payByCash_test {
 		@Test
 		public void testCalculateChange() throws DisabledException, OverloadException {
 			
-
 			myPay.calculateChange(20);
 			assertEquals(2,bDisp.size());
 			
 		}	
 
+}
