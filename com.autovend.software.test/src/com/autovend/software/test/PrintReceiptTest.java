@@ -46,23 +46,7 @@ public class PrintReceiptTest {
         testMap = cart.getCart();
     }
     
-    @Test
-    public void ReceiptPrinter() throws EmptyException, OverloadException{
-    	scale = new ElectronicScale(250,5);
-    	Numeral[] code = {Numeral.one, Numeral.five, Numeral.three, Numeral.four};
-    	Barcode barcode = new Barcode(code);
-    	product = new BarcodedUnit(barcode, 50);
-    	//ProductDatabases.BARCODED_PRODUCT_DATABASE.;
-    	scale.add(product);
-    	System.out.println(cart.getNumItems());
-    	printReceipt.print_rec(receiptPrinter, cart);
-    	
-    	
-    	
-    	
-    }
-    
-    
+    //PASSED 
     @Test(expected = EmptyException.class)
     public void testOutOfInk() throws EmptyException, OverloadException {
         printReceipt.reactToOutOfInkEvent(printer);
@@ -71,6 +55,7 @@ public class PrintReceiptTest {
         }
     }
     
+    //PASSED 
     @Test
     public void testAddedInk() throws EmptyException, OverloadException {
     	printReceipt.reactToInkAddedEvent(printer);
@@ -78,6 +63,7 @@ public class PrintReceiptTest {
         
     }
 
+    //PASSED 
     @Test(expected = EmptyException.class)
     public void testOutOfPaper() throws EmptyException, OverloadException {
     	printReceipt.reactToOutOfPaperEvent(printer);
@@ -86,7 +72,7 @@ public class PrintReceiptTest {
         }
     }
     
-    
+    //PASSED 
     @Test
     public void testAddedPaper() throws EmptyException, OverloadException {
     	printReceipt.reactToPaperAddedEvent(printer);
@@ -94,6 +80,7 @@ public class PrintReceiptTest {
         
     }
 
+    //PASSED 
     @Test
     public void testThanksCustomer() {
     	printReceipt.thanksCustomer(receiptPrinter);

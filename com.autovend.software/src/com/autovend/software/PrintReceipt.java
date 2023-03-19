@@ -1,7 +1,4 @@
-//BRETT LYLE 30103268
-//Nam Nguyen Vu 30154892
-//Aditi Yadav 30143652
-//Arun Sharma 30124252
+// Name: Nam Nguyen Vu (UCID: 30154892)
 
 package com.autovend.software;
 
@@ -61,6 +58,35 @@ public class PrintReceipt implements ReceiptPrinterObserver {
 		}
 		sessionComplete();
 		
+	}
+	
+	public void print(ReceiptPrinter receiptPrinter, Cart cart) throws EmptyException {
+		HashMap<Product,Integer> map = cart.getCart();
+		
+		// Print the receipt
+		for (Product key : map.keySet()) {
+			Integer quantity = map.get(key);
+			String quantityAmount = quantity.toString();
+			BigDecimal price = key.getPrice();
+			String moneyAmount = price.toString();
+			String s = key.toString();
+			String result = s+"\t" + quantityAmount + "\t" + moneyAmount +"\n";
+			// Print char from string (receiptP);
+			for (int i = 0; i < result.length(); i++) {
+				if(outOfInk) {
+					throw new EmptyException();
+				}
+				if(outOfPaper) {
+					throw new EmptyException();
+				}
+				try {
+				receiptPrinter.print(result.charAt(i));
+				} catch (OverloadException e) {
+					i =0;
+					result = "\n"+result.substring(i);
+				}
+			}
+		}
 	}
 	
 	// Make a method that return true
