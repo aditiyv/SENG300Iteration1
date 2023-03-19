@@ -129,7 +129,7 @@ public class Pay {
 	 * 		   false return value will signal attendant to assist customer.
 	 * @throws DisabledException; EmptyException; OverloadException
 	 */
-	boolean returnChange(BillDispenser dispenser, Bill billChange){
+	public boolean returnChange(BillDispenser dispenser, Bill billChange){
 
 		
 		if (bsOutput.hasSpace()){

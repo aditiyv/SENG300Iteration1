@@ -38,9 +38,6 @@ import org.junit.Test;
 import com.autovend.devices.BillSlot;
 
 
-
-	
-
 public class payByCash_test {
 	private Pay myPay;
 	Cart cart1;
@@ -67,7 +64,8 @@ public class payByCash_test {
 			escale = new ElectronicScale(250,5);
 		    bcscan = new BarcodeScanner();
 		    cart1 = new Cart(escale, bcscan);
-			billValidator = new BillValidator(currency, null);
+		    int[] denominations = {5,10};
+			billValidator = new BillValidator(currency.getInstance("CAD"), denominations);
 			bls = new BillStorage(5);
 			bDisp = new BillDispenser(5);
 			billInput = new BillSlot(false);
