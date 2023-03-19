@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.autovend.devices.BarcodeScanner;
@@ -23,14 +24,14 @@ import com.autovend.software.Cart;
 import com.autovend.software.PrintReceipt;
 
 public class PrintReceiptTest {
-	Cart cart = new Cart(new ElectronicScale(2, 0), new BarcodeScanner());
+	Cart cart = new Cart(new ElectronicScale(5, 1), new BarcodeScanner());
 	ReceiptPrinter printer = new ReceiptPrinter();
 	ReceiptPrinter receiptPrinter = new ReceiptPrinter();
 	PrintReceipt printReceipt;
 	//= new PrintReceipt(receiptPrinter, cart);
     HashMap<Product, Integer> testMap = new HashMap<Product, Integer>();
     
-    //@Before
+    @Before
     public void setUp() throws Exception {
         printReceipt = new PrintReceipt(printer, cart);
 
@@ -55,6 +56,13 @@ public class PrintReceiptTest {
     }
 
     @Test
+    public void testThanksCustomer() {
+    	String n = printReceipt.thanksCustomer(receiptPrinter);
+        assertEquals("Thanks the Customer", printReceipt.thanksCustomer(receiptPrinter));
+}
+    
+  //PASSED  
+    @Test
     public void testPrintReceipt() throws EmptyException, OverloadException {
     	testMap = new HashMap<>();
         testMap = cart.getCart();
@@ -62,9 +70,5 @@ public class PrintReceiptTest {
         printReceipt = new PrintReceipt(printer, cart);
         assertTrue(printReceipt.sessionComplete());
     }
-
-    @Test
-    public void testThanksCustomer() {
-        assertEquals("Thanks the Customer", printReceipt);
-}
+    
 }
