@@ -1,7 +1,9 @@
 //BRETT LYLE 30103268
 //Nam Nguyen Vu 30154892
 //Aditi Yadav 30143652
+//Alina Mansuri 30008370
 //Arun Sharma 30124252
+//Adam Mogensen 30071819
 
 package com.autovend.software;
 
@@ -129,7 +131,7 @@ public class Pay {
 	 * 		   false return value will signal attendant to assist customer.
 	 * @throws DisabledException; EmptyException; OverloadException
 	 */
-	boolean returnChange(BillDispenser dispenser, Bill billChange){
+	public boolean returnChange(BillDispenser dispenser, Bill billChange){
 
 		
 		if (bsOutput.hasSpace()){
