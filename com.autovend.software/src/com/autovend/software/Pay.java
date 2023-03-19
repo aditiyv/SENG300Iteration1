@@ -68,6 +68,7 @@ public class Pay {
 				bStorage.accept(bill);
 				if(scc.full) {
 					throw new StorageFullException();
+				//Attendant will be alerted if StorageFullException is thrown
 				}
 				double amountInserted = bc.getValue();
 				amount = amount - amountInserted;
@@ -83,10 +84,12 @@ public class Pay {
 		}catch(SimulationException s){
 			try {
 				bsInput.emit(bill);
+				//Bill is ejected, Attendant is notified.
+				return amount; //Return unchanged cart balance.	
 			} catch (DisabledException | SimulationException | OverloadException e) {
-				return amount;
-			} //Bill is ejected, Attendant is notified.
-			return amount; //Return unchanged cart balance.	
+				throw new StorageFullException(); 
+				//Can be changed to a more specific exception. Will be used to notify attendant
+			} 
 		}
 	}
 	
